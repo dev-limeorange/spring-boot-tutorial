@@ -30,15 +30,15 @@ public class BookController {
     }
 
     @PutMapping("/book/{bookId}")
-    public BookEntity updateBook(@PathVariable("bookId") String bookId,
+    public BookEntity updateBook(@PathVariable("bookId") UUID bookId,
                                  @RequestBody BookEntity bookEntity) {
-        bookEntity.setId(UUID.fromString(bookId));
+        bookEntity.setId(bookId);
         BookEntity updated = bookRepository.save(bookEntity);
         return updated;
     }
 
     @DeleteMapping("/book/{bookId}")
-    public void deleteBook(@PathVariable("bookId") String bookId) {
-        bookRepository.deleteById(UUID.fromString(bookId));
+    public void deleteBook(@PathVariable("bookId") UUID bookId) {
+        bookRepository.deleteById(bookId);
     }
 }

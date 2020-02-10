@@ -1,6 +1,7 @@
 package com.mz.example.examplebook.domain.book;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -11,6 +12,7 @@ import java.util.UUID;
 public class BookEntity {
 
     @Id
+    @Type(type = "uuid-char")
     @GeneratedValue
     private UUID id;
 
@@ -78,5 +80,16 @@ public class BookEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "BookEntity{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", category='" + category + '\'' +
+                ", sellCount=" + sellCount +
+                ", createAt=" + createAt +
+                '}';
     }
 }
