@@ -10,26 +10,41 @@ import java.util.UUID;
 public class BookRentalController {
 
     @Autowired
+    private BookRepository bookRepository;
+
+    @Autowired
     private BookRentalRepository bookRentalRepository;
+
+    @Autowired
+    private BookRentalCustomRepository bookRentalCustomRepository;
 
     @PostMapping("/book/{bookId}/rental")
     public BookRentalEntity createBookRental(@PathVariable("bookId") UUID bookId,
                                              @RequestBody BookRentalEntity bookRentalEntity) {
-        bookRentalEntity.setBookId(bookId);
-        BookRentalEntity created = bookRentalRepository.save(bookRentalEntity);
+        BookRentalEntity created = null;
+
+        BookEntity bookEntity = bookRepository.findById(bookId).get();
+        if(bookEntity != null) {
+            bookRentalEntity.setBookEntity(bookEntity);
+            created = bookRentalRepository.save(bookRentalEntity);
+        }
         return created;
     }
 
     @GetMapping("/book/{bookId}/rental")
     public List<BookRentalEntity> listBookRentalByBookId(@PathVariable("bookId") UUID bookId) {
-        return null;
+        return bookRentalCustomRepository.listBookRentalByBookId(bookId);
     }
 
     @PutMapping("/book/{bookId}/rental/{rentalId}/return")
     public BookRentalEntity returnBookRental(@PathVariable("rentalId") UUID rentalId) {
+        BookRentalEntity updated = null;
+
         BookRentalEntity bookRentalEntity = bookRentalRepository.findById(rentalId).get();
-        bookRentalEntity.setReturned(true);
-        BookRentalEntity returned = bookRentalRepository.save(bookRentalEntity);
-        return bookRentalEntity;
+        if(bookRentalEntity != null) {
+            bookRentalEntity.setReturned(true);
+            updated = bookRentalRepository.save(bookRentalEntity);
+        }
+        return updated;
     }
 }

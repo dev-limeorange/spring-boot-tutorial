@@ -16,9 +16,9 @@ public class BookRentalEntity {
     @GeneratedValue
     private UUID id;
 
-    @Type(type = "uuid-char")
-    @Column(nullable = false)
-    private UUID bookId;
+    @ManyToOne(targetEntity = BookEntity.class)
+    @JoinColumn(name = "book_id")
+    private BookEntity bookEntity;
 
     @Column(nullable = false)
     private String userId;
@@ -37,15 +37,6 @@ public class BookRentalEntity {
     public BookRentalEntity() {
     }
 
-    public BookRentalEntity(UUID id, UUID bookId, String userId, String userName, boolean returned, Date createAt) {
-        this.id = id;
-        this.bookId = bookId;
-        this.userId = userId;
-        this.userName = userName;
-        this.returned = returned;
-        this.createAt = createAt;
-    }
-
     public UUID getId() {
         return id;
     }
@@ -54,12 +45,12 @@ public class BookRentalEntity {
         this.id = id;
     }
 
-    public UUID getBookId() {
-        return bookId;
+    public BookEntity getBookEntity() {
+        return bookEntity;
     }
 
-    public void setBookId(UUID bookId) {
-        this.bookId = bookId;
+    public void setBookEntity(BookEntity bookEntity) {
+        this.bookEntity = bookEntity;
     }
 
     public String getUserId() {
@@ -98,7 +89,6 @@ public class BookRentalEntity {
     public String toString() {
         return "BookRentalEntity{" +
                 "id=" + id +
-                ", bookId=" + bookId +
                 ", userId='" + userId + '\'' +
                 ", userName='" + userName + '\'' +
                 ", returned=" + returned +
