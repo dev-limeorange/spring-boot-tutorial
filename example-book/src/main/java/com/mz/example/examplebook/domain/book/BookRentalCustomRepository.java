@@ -17,20 +17,18 @@ public class BookRentalCustomRepository {
     private EntityManager entityManager;
 
     public List<BookRentalEntity> listBookRentalByBookId(UUID bookId) {
-        JPAQuery query = new JPAQuery(entityManager);
+        JPAQuery<?> query = new JPAQuery<>(entityManager);
         QBookEntity qBookEntity = QBookEntity.bookEntity;
         QBookRentalEntity qBookRentalEntity = QBookRentalEntity.bookRentalEntity;
 
-        QueryBase queryBase = query.select(qBookRentalEntity)
+        List<BookRentalEntity> fetched = query.select(qBookRentalEntity)
                 .from(qBookRentalEntity)
                 .leftJoin(qBookEntity)
                 .on(qBookRentalEntity.bookEntity.id.eq(qBookEntity.id))
-                .where(qBookRentalEntity.bookEntity.id.eq(bookId));
+                .where(qBookRentalEntity.bookEntity.id.eq(bookId))
+                .fetch();
 
-        FetchableQueryBase fetchableQueryBase = (FetchableQueryBase) queryBase;
-        List<BookRentalEntity> list = fetchableQueryBase.fetch();
-
-        return list;
+        return fetched;
     }
 
 }
